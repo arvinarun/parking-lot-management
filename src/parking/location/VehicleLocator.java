@@ -14,9 +14,9 @@ public class VehicleLocator
         this.parkingLot = parkingLot;
     }
     /*Main method to Find my vehicle feature
-    *Inputs : vehicle number
+     Inputs : vehicle number
             : vehicle type
-    *Output : Vehicle location
+     Output : Vehicle location
             : Error message
     */
    public String findVehicle(String vehicleNumber, String vehicleType)
