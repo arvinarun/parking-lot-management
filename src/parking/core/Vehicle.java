@@ -1,14 +1,25 @@
 package parking.core;
 public class Vehicle {
+    //Declaring Vehicle details
+    private String vehicleNumber;
+    private String vehicleType;
+    private VehicleClass vehicleClass;
 
-    String vehicleNumber;
-
-    public Vehicle(String vehicleNumber){
+    public Vehicle(String vehicleNumber, String vehicleType, VehicleClass vehicleClass) {
         this.vehicleNumber = vehicleNumber;
+        this.vehicleType = vehicleType;
+        this.vehicleClass = vehicleClass;
     }
 
-    public static void main(String[] args) {
-        Vehicle v1 = new Vehicle("ABC-123");
-        System.out.println(v1.vehicleNumber);
+    public String getVehicleNumber() {
+        return vehicleNumber;
+    }
+
+    public String getVehicleType() {
+        return vehicleType;
+    }
+
+    public VehicleClass getvehicleClass() {
+        return vehicleClass;
     }
 }
