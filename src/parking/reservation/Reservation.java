@@ -1,5 +1,7 @@
 package parking.reservation;
 
+import parking.core.Vehicle;
+import parking.core.ParkingSpace;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -42,13 +44,13 @@ public class Reservation{
         }
 
         //Validate start time
-        if(StartTime == null){
+        if(startTime == null){
             throw new IllegalArgumentException("Start time cannot be null.");
         }
 
         //Validate end time
         if(endTime == null){
-            throw new IllegalArgumentException("End time cannot be null.")
+            throw new IllegalArgumentException("End time cannot be null.");
         }
 
         //End time must be after start time
@@ -58,4 +60,18 @@ public class Reservation{
             );
         }
     }
+
+    //Set values
+    this.reservationId = UUID.randomUUID().toString();
+    this.vehicle = vehicle;
+    this.parkingSpace = parkingSpace;
+    this.startTime = startTime;
+    thid.endTime = endTime;
+
+    //Initial state
+    this.status = ReservationStatus.ACTIVE;
+
+    //Calculate reservation price
+    this.price = calculateReservationPrice();
+
 }
