@@ -3,16 +3,16 @@ import parking.core.Vehicle;
 import java.time.LocalDateTime;
 
 public class Payment {
-    private final String PaymentId;
+    private final String paymentId;
     private final Vehicle vehicle;
-    private final double Amount;
+    private final double amount;
     private final PaymentMethod paymentMethod;
-    private PaymentStatus paymentStatus
+    private PaymentStatus paymentStatus;
     private final LocalDateTime paymentTime;
 
-    public Payment (String PaymentId, Vehicle vehicle, double Amount,PaymentMethod paymentMethod)
+    public Payment (String paymentId, Vehicle vehicle, double amount,PaymentMethod paymentMethod)
 {
-    if (PaymentId == null) {
+    if (paymentId == null) {
         throw new IllegalArgumentException ("Payment Id cannot be null.");
     }
 
@@ -21,7 +21,7 @@ public class Payment {
 
     }
 
-    if (Amount <0) {
+    if (amount <0) {
         throw new IllegalArgumentException("Payment amount cannot be negative.");
 
     }
@@ -31,16 +31,16 @@ public class Payment {
 
     }
 
-    this.PaymentId= PaymentId;
+    this.paymentId= paymentId;
     this.vehicle= vehicle;
-    this.Amount= Amount;
+    this.amount= amount;
     this.paymentMethod= paymentMethod;
     this.paymentStatus= PaymentStatus.PENDING;
     this.paymentTime= LocalDateTime.now();
 }
      
 public String getPaymentId() {
-    return PaymentID;
+    return paymentId;
 
 }
 public Vehicle getVehicle() {
@@ -48,7 +48,7 @@ public Vehicle getVehicle() {
 
 }
 public double getAmount() {
-    return Amount;
+    return amount;
 
 }
 public PaymentMethod getPaymentMethod() {
@@ -74,9 +74,8 @@ public boolean isPaid() {
 // override
 public String toString() {
     return "Payment{" +
-            "PaymentId = '" + PaymentId + '\ '' +
-            ", vehicle=" + vehicle.getRegistrationNumber() +
-            ",Amount =" + Amount +
+            "paymentId = '" + paymentId + '\ '' + Number() +
+            ",amount =" + amount +
             ", paymentMethod=" + paymentMethod +
             ", paymentStatus=" + paymentStatus +
             ", paymentTime=" + paymentTime +
@@ -85,4 +84,3 @@ public String toString() {
     }
 
 }
-    
