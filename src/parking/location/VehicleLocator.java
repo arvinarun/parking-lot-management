@@ -1,11 +1,15 @@
 package parking.location;
-public class FindMyVehicle
+import parking.core.Vehicle;
+import parking.core.ParikngLot;
+import parking.core.VehicleClass;
+
+public class VehicleLocator
 {
     //Reference for the main parking lot
     private ParkingLot parkingLot;
 
     //Constructor 
-    public FindMyVehicle(ParkingLot parkingLot)
+    public VehicleLocator(ParkingLot parkingLot)
     {
         this.parkingLot = parkingLot;
     }
@@ -23,12 +27,12 @@ public class FindMyVehicle
         return "Invalid information.\n"
                 +"please enter a vehicle number.";
     }
+    vehicleNumber = vehicleNumber.trim();
     //vehicle type validate
     if(vehicleType == null || vehicleType.trim().isEmpty())
     {
         return "Invalid information.\n"
                 +"please enter a vehicle type.";
     }
-    vehicleNumber =vehicleNumber.trim();
     vehicleType = vehicleType.trim();
    }}
