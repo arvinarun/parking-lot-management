@@ -1,36 +1,26 @@
 package parking.payment;
+
 import parking.core.Vehicle;
 import java.time.LocalDateTime;
 
 public class Payment {
-    private final String paymentId;
-    private final Vehicle vehicle;
-    private final double amount;
-    private final PaymentMethod paymentMethod;
+
+    private static int nextPaymentId = 1;
+
+    private String paymentId;
+    private Vehicle vehicle;
+    private double amount;
+    private PaymentMethod paymentMethod;
     private PaymentStatus paymentStatus;
-    private final LocalDateTime paymentTime;
+    private LocalDateTime paymentTime;
 
-    public Payment(String paymentId, Vehicle vehicle, double amount, PaymentMethod paymentMethod) {
-        if (paymentId == null) {
-            throw new IllegalArgumentException("Payment Id cannot be null.");
-        }
+    public Payment(Vehicle vehicle, double amount, PaymentMethod paymentMethod) {
 
-        if (vehicle == null) {
-            throw new IllegalArgumentException("Vehicle cannot be null.");
-        }
-
-        if (amount < 0) {
-            throw new IllegalArgumentException("Payment amount cannot be negative.");
-        }
-
-        if (paymentMethod == null) {
-            throw new IllegalArgumentException("Payment Method cannot be null.");
-        }
-
-        this.paymentId = paymentId;
+        this.paymentId = "P" + nextPaymentId++;
         this.vehicle = vehicle;
         this.amount = amount;
         this.paymentMethod = paymentMethod;
+
         this.paymentStatus = PaymentStatus.PENDING;
         this.paymentTime = LocalDateTime.now();
     }
@@ -60,7 +50,7 @@ public class Payment {
     }
 
     public void markAsPaid() {
-        this.paymentStatus = PaymentStatus.PAID;
+        paymentStatus = PaymentStatus.PAID;
     }
 
     public boolean isPaid() {
@@ -69,9 +59,10 @@ public class Payment {
 
     @Override
     public String toString() {
+
         return "Payment{" +
                 "paymentId='" + paymentId + '\'' +
-                ", vehicle=" + vehicle +
+                ", vehicle=" + vehicle.getVehicleNumber() +
                 ", amount=" + amount +
                 ", paymentMethod=" + paymentMethod +
                 ", paymentStatus=" + paymentStatus +
