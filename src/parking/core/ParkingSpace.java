@@ -2,7 +2,6 @@ package parking.core;
 
 public class ParkingSpace {
 
-    // Declaring ParkingSpace attributes 
     private int spaceNumber;
     private VehicleClass allowedClass;
     private boolean isOccupied;
