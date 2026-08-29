@@ -1,6 +1,6 @@
 package parking.payment;
 
-public enum PaymentMethod
-{
-    ONLINE,PHYSICAL
+public enum PaymentMethod {
+    ONLINE,
+    PHYSICAL
 }
