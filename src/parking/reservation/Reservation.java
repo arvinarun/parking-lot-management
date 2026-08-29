@@ -16,16 +16,12 @@ public class Reservation {
 
     private double price;
     private ReservationStatus status;
+
     private static final double NORMAL_RATE_PER_HOUR = 100.00;
     private static final double RESERVATION_SURCHARGE = 50.00;
     private static final double NO_SHOW_CHARGE = 100.00;
 
-    public Reservation(
-        Vehicle vehicle,
-        ParkingSpace parkingSpace,
-        LocalDateTime startTime,
-        LocalDateTime endTime
-    ) {
+    public Reservation(Vehicle vehicle, ParkingSpace parkingSpace, LocalDateTime startTime, LocalDateTime endTime) {
 
         if (vehicle == null) {
             throw new IllegalArgumentException("Vehicle cannot be null.");
@@ -49,7 +45,6 @@ public class Reservation {
             );
         }
 
-        // Fixed: Moved field initializations inside the constructor block
         this.reservationId = UUID.randomUUID().toString();
         this.vehicle = vehicle;
         this.parkingSpace = parkingSpace;
@@ -182,7 +177,7 @@ public class Reservation {
 
         return Duration.between(endTime, actualExitTime).toMinutes();
     }
-    
+
     public double calculateExtraHours(LocalDateTime actualExitTime) {
         long extraMinutes = calculateExtraMinutes(actualExitTime);
         return extraMinutes / 60.0;
