@@ -6,7 +6,7 @@ public class Vehicle {
     private VehicleClass vehicleClass;
 
     public Vehicle(String vehicleNumber, String vehicleType, VehicleClass vehicleClass) {
-        this.vehicleNumber = vehicleNumber;
+        this.vehicleNumber =  vehicleNumber;
         this.vehicleType = vehicleType;
         this.vehicleClass = vehicleClass;
     }
@@ -19,7 +19,7 @@ public class Vehicle {
         return vehicleType;
     }
 
-    public VehicleClass getvehicleClass() {
+    public VehicleClass getVehicleClass() {
         return vehicleClass;
     }
 }
