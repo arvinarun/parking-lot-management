@@ -1,4 +1,5 @@
 package parking.core;
+
 import java.util.ArrayList;
 public class ParkingLot {
     private ArrayList <ParkingSpace> parkingSpaces;
@@ -27,22 +28,20 @@ public class ParkingLot {
     }
 
     public ParkingSpace findAvailableSpace(VehicleClass vehicleClass) {
-
         for(ParkingSpace space : parkingSpaces) {
-
             if(!space.isOccupied() && !space.isReserved() && space.getAllowedClass() == vehicleClass) {
                 return space;
             }
-
         }
+
         return null;
     }
 
     public ParkingSpace parkVehicle(Vehicle vehicle) {
-        
         if(vehicle == null) {
             return null;
         }
+
         ParkingSpace space = findAvailableSpace(vehicle.getVehicleClass());
 
         if(space == null) {
@@ -54,14 +53,11 @@ public class ParkingLot {
             return space;
         }
 
-
         return null;
     }
 
     public boolean removeVehicle(String vehicleNumber) {
-        
         for(ParkingSpace space : parkingSpaces) {
-
             if(space.isOccupied() && space.getOccupiedVehicle() != null && space.getOccupiedVehicle().getVehicleNumber().equals(vehicleNumber)) {
                 return space.removeVehicle();
             }
@@ -71,9 +67,7 @@ public class ParkingLot {
     }
 
     public ParkingSpace findVehicle(String vehicleNumber) {
-
         for(ParkingSpace space : parkingSpaces) {
-
             if(space.isOccupied() && space.getOccupiedVehicle() != null && space.getOccupiedVehicle().getVehicleNumber().equals(vehicleNumber)) {
                 return space;
             } 
@@ -84,5 +78,9 @@ public class ParkingLot {
 
     public int getTotalSpaces() {
         return parkingSpaces.size();
+    }
+
+    public ArrayList<ParkingSpace> getParkingSpaces() {
+        return parkingSpaces;
     }
 }

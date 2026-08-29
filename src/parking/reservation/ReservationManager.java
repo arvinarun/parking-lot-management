@@ -17,7 +17,6 @@ public class ReservationManager {
     }
 
     public Reservation createReservation(Vehicle vehicle, LocalDateTime startTime, LocalDateTime endTime) {
-
         if (vehicle == null) {
             return null;
         }
@@ -41,13 +40,11 @@ public class ReservationManager {
     }
 
     public Reservation findReservation(String reservationId) {
-
         if (reservationId == null) {
             return null;
         }
 
         for (Reservation reservation : reservations) {
-
             if (reservation.getReservationId().equalsIgnoreCase(reservationId.trim())) {
                 return reservation;
             }
@@ -57,13 +54,11 @@ public class ReservationManager {
     }
 
     public Reservation findReservationByVehicle(String vehicleNumber) {
-
         if (vehicleNumber == null) {
             return null;
         }
 
         for (Reservation reservation : reservations) {
-
             if (reservation.belongsToVehicle(vehicleNumber) &&
                 reservation.isActive()) {
 
@@ -82,9 +77,7 @@ public class ReservationManager {
             return false;
         }
 
-        reservation.cancel();
-
-        return true;
+        return reservation.cancel();
     }
 
     public void checkReservations(LocalDateTime currentTime) {

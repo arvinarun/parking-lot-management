@@ -1,6 +1,5 @@
 package parking.core;
 public class Vehicle {
-
     private String vehicleNumber;
     private String vehicleType;
     private VehicleClass vehicleClass;
@@ -14,11 +13,9 @@ public class Vehicle {
     public String getVehicleNumber() {
         return vehicleNumber;
     }
-
     public String getVehicleType() {
         return vehicleType;
     }
-
     public VehicleClass getVehicleClass() {
         return vehicleClass;
     }

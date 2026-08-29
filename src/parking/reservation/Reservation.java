@@ -6,7 +6,6 @@ import parking.core.ParkingSpace;
 import java.time.Duration;
 import java.time.LocalDateTime;
 public class Reservation {
-
     private static int nextReservationId = 1;
 
     private String reservationId;
@@ -23,17 +22,15 @@ public class Reservation {
     private static final double NO_SHOW_CHARGE = 100.00;
 
     public Reservation(Vehicle vehicle, ParkingSpace parkingSpace, LocalDateTime startTime, LocalDateTime endTime) {
-
         this.reservationId = "R" + nextReservationId++;
         this.vehicle = vehicle;
         this.parkingSpace = parkingSpace;
         this.startTime = startTime;
         this.endTime = endTime;
-
         this.status = ReservationStatus.ACTIVE;
         this.price = calculateReservationPrice();
 
-        parkingSpace.addReservation();
+        parkingSpace.addReservation(vehicle);
     }
 
     public String getReservationId() {
@@ -71,7 +68,6 @@ public class Reservation {
     }
 
     public boolean cancel() {
-
         if (status != ReservationStatus.ACTIVE) {
             return false;
         }
@@ -83,7 +79,6 @@ public class Reservation {
     }
 
     public boolean markAsUsed() {
-
         if (status != ReservationStatus.ACTIVE) {
             return false;
         }
@@ -94,7 +89,6 @@ public class Reservation {
     }
 
     public void checkExpiration(LocalDateTime currentTime) {
-
         if (status == ReservationStatus.ACTIVE && currentTime.isAfter(endTime)) {
 
             parkingSpace.cancelReservation();
@@ -103,14 +97,12 @@ public class Reservation {
     }
 
     public boolean hasPassedNoShowPeriod(LocalDateTime currentTime) {
-
         LocalDateTime noShowTime = startTime.plusMinutes(60);
 
         return status == ReservationStatus.ACTIVE && currentTime.isAfter(noShowTime);
     }
 
     public void processNoShow(LocalDateTime currentTime) {
-
         if (hasPassedNoShowPeriod(currentTime)) {
 
             price += NO_SHOW_CHARGE;
@@ -121,18 +113,14 @@ public class Reservation {
     }
 
     private double calculateReservationPrice() {
-
         long minutes = Duration.between(startTime,endTime).toMinutes();
-
         double hours = minutes / 60.0;
-
         double parkingCharge = hours * NORMAL_RATE_PER_HOUR;
 
         return parkingCharge + RESERVATION_SURCHARGE;
     }
 
     public long calculateExtraMinutes(LocalDateTime actualExitTime) {
-
         if (!actualExitTime.isAfter(endTime)) {
             return 0;
         }
@@ -141,14 +129,12 @@ public class Reservation {
     }
 
     public double calculateExtraHours(LocalDateTime actualExitTime) {
-
         long extraMinutes = calculateExtraMinutes(actualExitTime);
 
         return extraMinutes / 60.0;
     }
 
     public boolean belongsToVehicle(String vehicleNumber) {
-
         if (vehicleNumber == null) {
             return false;
         }
@@ -158,7 +144,6 @@ public class Reservation {
 
     @Override
     public String toString() {
-
         return "Reservation{" + "reservationId='" + reservationId + '\'' + ", vehicle=" + vehicle.getVehicleNumber() +
                 ", parkingSpace=" + parkingSpace.getSpaceNumber() + ", startTime=" + startTime + ", endTime=" + endTime +
                 ", price=" + price + ", status=" + status + '}';
