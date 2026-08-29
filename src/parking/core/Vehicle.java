@@ -1,6 +1,6 @@
 package parking.core;
 public class Vehicle {
-    //Declaring Vehicle details
+
     private String vehicleNumber;
     private String vehicleType;
     private VehicleClass vehicleClass;
