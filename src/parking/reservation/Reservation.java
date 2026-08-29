@@ -107,7 +107,6 @@ public class Reservation {
             );
         }
 
-        // Fixed: Moved validation check inside the cancel() method body
         if (status == ReservationStatus.EXPIRED) {
             throw new IllegalStateException(
                 "An expired reservation cannot be cancelled."
@@ -183,8 +182,7 @@ public class Reservation {
 
         return Duration.between(endTime, actualExitTime).toMinutes();
     }
-
-    // Fixed: Renamed duplicate method name/signature conflict (returns double hours now)
+    
     public double calculateExtraHours(LocalDateTime actualExitTime) {
         long extraMinutes = calculateExtraMinutes(actualExitTime);
         return extraMinutes / 60.0;
