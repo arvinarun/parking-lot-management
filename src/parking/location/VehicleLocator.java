@@ -18,13 +18,13 @@ public class VehicleLocator {
 
         // Invalid inputs
         if(name == null || name.trim().isEmpty()) {
-            return "Invalid information !\nPlease enter your name.";
+            return "<html>Vehicle not found!<br>" + "Please check your vehicle number.</html>";
         }
         if(vehicleNumber == null || vehicleNumber.trim().isEmpty()) {
-            return "Invalid information !\nPlease enter a vehicle number.";
+            return "<html>Vehicle not found!<br>" + "Please check your vehicle number.</html>";
         }
         if(vehicleType == null || vehicleType.trim().isEmpty()) {
-            return "Invalid information !\nPlease enter a vehicle type.";
+            return "<html>Vehicle not found!<br>" + "Please check your vehicle number.</html>";
         }
 
         name = name.trim();
@@ -61,9 +61,7 @@ public class VehicleLocator {
             floor = 2;
         }
 
-        return "Vehicle Found.\n" +
-                "Floor: " + floor +
-                "\nParking Space: " + space.getSpaceNumber();
+        return "<html>" + "<b>Vehicle Found!</b><br><br>" + "Floor: " + floor + "<br>" + "Parking Space: " + space.getSpaceNumber() + "</html>";
     }
 
     // Calasification

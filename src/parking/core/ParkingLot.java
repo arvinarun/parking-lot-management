@@ -5,10 +5,12 @@ import java.util.ArrayList;
 public class ParkingLot {
     // List of all parking spaces in the lot
     private ArrayList <ParkingSpace> parkingSpaces;
+    private ArrayList <Vehicle> vehicleHistory;
 
     // Constructor to et attributes of all 100 parking spaces
     public ParkingLot() {
         parkingSpaces = new ArrayList <>();
+        vehicleHistory = new ArrayList <>();
 
         for(int i = 1; i <= 30; i++) {
             parkingSpaces.add (new ParkingSpace(i, VehicleClass.LIGHT));
@@ -71,6 +73,10 @@ public class ParkingLot {
 
 
         if (space.parkVehicle (vehicle)) {
+            if (!vehicleHistory.contains(vehicle)) {
+                vehicleHistory.add(vehicle);
+            }
+
             return space;
         }
 
@@ -101,7 +107,11 @@ public class ParkingLot {
             return "Payment not completed !\nPlease complete payment before exiting.";
         }
 
+        // Record Exit
+        Vehicle vehicle = space.getOccupiedVehicle();
+
         if (removeVehicle(vehicleNumber)) {
+            vehicle.recordExit();
             return "Payment confirmed. Vehicle may exit.";
         }
 
@@ -127,5 +137,9 @@ public class ParkingLot {
     // Return full list of spaces
     public ArrayList<ParkingSpace> getParkingSpaces() {
         return parkingSpaces;
+    }
+
+    public ArrayList<Vehicle> getVehicleHistory() {
+        return vehicleHistory;
     }
 }

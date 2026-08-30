@@ -36,8 +36,8 @@ public class PaymentManager {
         vehicleNumber = vehicleNumber.trim();
 
         // Check for reservation
-        Reservation reservation = reservationManager.findReservationByVehicle(vehicleNumber);
-
+        Reservation reservation = reservationManager.findReservationForPayment(vehicleNumber);
+        
         double amount;
         Vehicle vehicle;
 
@@ -64,11 +64,29 @@ public class PaymentManager {
     }
 
     private double calculateWalkInAmount(Vehicle vehicle) {
-        long minutes = Duration.between(vehicle.getEntryTime(), LocalDateTime.now()).toMinutes();
-        double ratePerMinute = NORMAL_RATE_PER_HOUR / 60.0;
 
-        return minutes * ratePerMinute;
+    long minutes = Duration.between(
+            vehicle.getEntryTime(),
+            LocalDateTime.now()
+    ).toMinutes();
+
+    double amount;
+
+    // First hour has a fixed charge
+    if (minutes <= 60) {
+        amount = 100.00;
+    } else {
+        double extraMinutes = minutes - 60;
+        double extraCharge = (extraMinutes / 60.0) * NORMAL_RATE_PER_HOUR;
+
+        amount = 100.00 + extraCharge;
     }
+
+    // Round UP to the nearest Rs.10
+    amount = Math.ceil(amount / 10.0) * 10.0;
+
+    return amount;
+}
 
     public Payment findPaymentByVehicle(String vehicleNumber) {
         if (vehicleNumber == null) {

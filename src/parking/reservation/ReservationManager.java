@@ -24,9 +24,13 @@ public class ReservationManager {
             return null;
         }
 
-        ParkingSpace space = parkingLot.findAvailableSpace (vehicle.getVehicleClass());
+        ParkingSpace space = parkingLot.findAvailableSpace(vehicle.getVehicleClass());
 
         if (space == null) {
+            return null;
+        }
+
+        if (!space.addReservation(vehicle)) {
             return null;
         }
 
@@ -37,10 +41,10 @@ public class ReservationManager {
                 endTime
         );
 
-        reservations.add (reservation);
+        reservations.add(reservation);
 
         return reservation;
-    }
+    }   
 
     // Finds a reservation
     public Reservation findReservation (String reservationId) {
@@ -109,5 +113,23 @@ public class ReservationManager {
     // Returns full list of reservations
     public ArrayList<Reservation> getReservations() {
         return reservations;
+    }
+
+    public Reservation findReservationForPayment(String vehicleNumber) {
+
+        if (vehicleNumber == null) {
+            return null;
+        }
+
+        for (Reservation reservation : reservations) {
+
+            if (reservation.belongsToVehicle(vehicleNumber) &&
+                (reservation.isActive() || reservation.isUsed())) {
+
+                return reservation;
+            }
+        }
+
+        return null;
     }
 }
