@@ -60,8 +60,11 @@ public class ParkingLot {
             return null;
         }
 
-        ParkingSpace space = findAvailableSpace (vehicle.getVehicleClass());
-
+        ParkingSpace space = findReservedSpace(vehicle.getVehicleNumber());
+        if (space == null) {
+            space = findAvailableSpace (vehicle.getVehicleClass());
+        }
+        
         if (space == null) {
             return null;
         }

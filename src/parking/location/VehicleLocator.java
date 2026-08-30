@@ -18,7 +18,7 @@ public class VehicleLocator {
 
         // Invalid inputs
         if(name == null || name.trim().isEmpty()) {
-            return "Invalid information !\nPlease enter your.";
+            return "Invalid information !\nPlease enter your name.";
         }
         if(vehicleNumber == null || vehicleNumber.trim().isEmpty()) {
             return "Invalid information !\nPlease enter a vehicle number.";

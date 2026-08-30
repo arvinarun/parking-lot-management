@@ -73,7 +73,7 @@ public class ReservationManager {
     }
 
     //Marks reservation used
-    public boolean marksReservationUsed (String vehicleNumber) {
+    public boolean markReservationUsed (String vehicleNumber) {
         Reservation reservation = findReservationByVehicle (vehicleNumber);
 
         if (reservation == null) {
