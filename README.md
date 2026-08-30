@@ -1,6 +1,6 @@
 # Smart Parking Management System
 
-Hey there! This is my object-oriented programming (OOP) coursework project for a Smart Parking Management System. It's a Java Swing desktop application designed to handle day-to-day parking operations like vehicle entry, live spot tracking, advance reservations, payment processing, and owner lookups.
+Hey there! This is our object-oriented programming (OOP) coursework project for a Smart Parking Management System. It's a Java Swing desktop application designed to handle day-to-day parking operations like vehicle entry, live spot tracking, advance reservations, payment processing, and owner lookups.
 
 ---
 
