@@ -16,7 +16,7 @@ public class FindVehiclePanel extends JPanel {
     // Input fields
     private JTextField nameField;
     private JTextField vehicleNumberField;
-    private JTextField vehicleTypeField;
+    private JComboBox<String> vehicleTypeDropdown;
 
     // Label to show the result message
     private JLabel resultLabel;
@@ -42,8 +42,11 @@ public class FindVehiclePanel extends JPanel {
 
         // Vehicle type row
         add(new JLabel("Vehicle Type:"));
-        vehicleTypeField = new JTextField();
-        add(vehicleTypeField);
+
+        String[] vehicleTypes = {"Car", "SUV", "Jeep", "Pickup Truck", "Motorcycle", "Bike", "Truck", "Bus"};
+
+        vehicleTypeDropdown = new JComboBox<>(vehicleTypes);
+        add(vehicleTypeDropdown);
 
         // Submit button
         JButton submitButton = new JButton("Find Vehicle");
@@ -67,7 +70,7 @@ public class FindVehiclePanel extends JPanel {
         // Get the text from the input fields
         String name = nameField.getText().trim();
         String vehicleNumber = vehicleNumberField.getText().trim();
-        String vehicleType = vehicleTypeField.getText().trim();
+        String vehicleType = (String) vehicleTypeDropdown.getSelectedItem();
 
         // Call the locator, it already handles empty checks and invalid type checks itself
         String result = vehicleLocator.findVehicle(name, vehicleNumber, vehicleType);

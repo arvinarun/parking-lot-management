@@ -75,10 +75,11 @@ public class PaymentPanel extends JPanel {
             return;
         }
 
-        // Mark it as paid right away since this is the payment tab
         paymentManager.markAsPaid(vehicleNumber);
 
-        // Show the amount that was charged
         resultLabel.setText("Payment successful. Amount: " + payment.getAmount());
+
+        vehicleNumberField.setText("");
+        methodDropdown.setSelectedIndex(0);
     }
 }

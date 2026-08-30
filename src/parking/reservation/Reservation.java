@@ -34,7 +34,6 @@ public class Reservation {
         this.status = ReservationStatus.ACTIVE;
         this.price = calculateReservationPrice();
 
-        parkingSpace.addReservation(vehicle);
     }
 
     // Getters
@@ -123,11 +122,26 @@ public class Reservation {
     }
 
     // Base reservation charge
-    private double calculateReservationPrice() {
-        long minutes = Duration.between(startTime,endTime).toMinutes();
-        double hours = minutes / 60.0;
-        double parkingCharge = hours * NORMAL_RATE_PER_HOUR;
+        private double calculateReservationPrice() {
 
+        long minutes = Duration.between(startTime, endTime).toMinutes();
+
+        double parkingCharge;
+
+        // First hour has a fixed charge
+        if (minutes <= 60) {
+            parkingCharge = NORMAL_RATE_PER_HOUR;
+        } else {
+            double extraMinutes = minutes - 60;
+            double extraCharge = (extraMinutes / 60.0) * NORMAL_RATE_PER_HOUR;
+
+            parkingCharge = NORMAL_RATE_PER_HOUR + extraCharge;
+        }
+
+        // Round UP to the nearest Rs.10
+        parkingCharge = Math.ceil(parkingCharge / 10.0) * 10.0;
+
+        // Add reservation surcharge
         return parkingCharge + RESERVATION_SURCHARGE;
     }
 
@@ -147,11 +161,17 @@ public class Reservation {
     }
 
     // Apply charge for extra time
-    public void applyExtraCharge (LocalDateTime actualExitTime) {
-        double extraHours = calculateExtraHours(actualExitTime);
+    public void applyExtraCharge(LocalDateTime actualExitTime) {
+        long extraMinutes = calculateExtraMinutes(actualExitTime);
 
-        if (extraHours > 0) {
-            price += extraHours * NORMAL_RATE_PER_HOUR;
+        if (extraMinutes > 0) {
+
+            double extraCharge =
+                    (extraMinutes / 60.0) * NORMAL_RATE_PER_HOUR;
+
+            extraCharge = Math.ceil(extraCharge / 10.0) * 10.0;
+
+            price += extraCharge;
         }
     }
 

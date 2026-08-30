@@ -21,7 +21,7 @@ public class EntryPanel extends JPanel {
     // Input fields
     private JTextField nameField;
     private JTextField vehicleNumberField;
-    private JTextField vehicleTypeField;
+    private JComboBox<String> vehicleTypeDropdown;
 
     // Label to show the result message
     private JLabel resultLabel;
@@ -46,8 +46,11 @@ public class EntryPanel extends JPanel {
 
         // Vehicle type row
         add(new JLabel("Vehicle Type:"));
-        vehicleTypeField = new JTextField();
-        add(vehicleTypeField);
+
+        String[] vehicleTypes = {"Car", "SUV", "Jeep", "Pickup Truck", "Motorcycle", "Bike", "Truck", "Bus"};
+
+        vehicleTypeDropdown = new JComboBox<>(vehicleTypes);
+        add(vehicleTypeDropdown);
 
         // Submit button
         JButton submitButton = new JButton("Enter Parking Lot");
@@ -71,7 +74,7 @@ public class EntryPanel extends JPanel {
         // Get the text from the input fields
         String name = nameField.getText().trim();
         String vehicleNumber = vehicleNumberField.getText().trim();
-        String vehicleType = vehicleTypeField.getText().trim();
+        String vehicleType = (String) vehicleTypeDropdown.getSelectedItem();
 
         // Check inputs are not empty
         if (name.isEmpty() || vehicleNumber.isEmpty() || vehicleType.isEmpty()) {
@@ -109,11 +112,15 @@ public class EntryPanel extends JPanel {
 
         // Show the result to the user
         if (space == null) {
-            resultLabel.setText("No available space for your vehicle type.");
-        } else {
-            int floor = space.getSpaceNumber() <= 50 ? 1 : 2;
-            resultLabel.setText("Park at Space " + space.getSpaceNumber() + ", Floor " + floor);
-        }
+    resultLabel.setText("No available space for your vehicle type.");
+    } else {
+        int floor = space.getSpaceNumber() <= 50 ? 1 : 2;
+        resultLabel.setText("Park at Space " + space.getSpaceNumber() + ", Floor " + floor);
+
+        nameField.setText("");
+        vehicleNumberField.setText("");
+        vehicleTypeDropdown.setSelectedIndex(0);
+    }
     }
 
     // Same classification rules used in VehicleLocator, matches vehicle type text to a class

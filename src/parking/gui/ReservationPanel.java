@@ -9,10 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-
 public class ReservationPanel extends JPanel {
 
     // Shared object needed to make a reservation
@@ -21,22 +19,25 @@ public class ReservationPanel extends JPanel {
     // Input fields
     private JTextField nameField;
     private JTextField vehicleNumberField;
-    private JTextField vehicleTypeField;
-    private JTextField startTimeField;
-    private JTextField endTimeField;
+    private JComboBox<String> vehicleTypeDropdown;
+    
+    private JSpinner startDateSpinner;
+    private JSpinner startHourSpinner;
+    private JSpinner startMinuteSpinner;
+
+    private JSpinner endDateSpinner;
+    private JSpinner endHourSpinner;
+    private JSpinner endMinuteSpinner;
 
     // Label to show the result message
     private JLabel resultLabel;
-
-    // Format we expect the user to type date and time in
-    private static final DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     // Constructor builds the reservation tab layout
     public ReservationPanel(ReservationManager reservationManager) {
         this.reservationManager = reservationManager;
 
         // Use a simple vertical layout, one row per item
-        setLayout(new GridLayout(7, 2, 5, 5));
+        setLayout(new GridLayout(9, 2, 5, 5));
 
         // Name row
         add(new JLabel("Name:"));
@@ -50,18 +51,51 @@ public class ReservationPanel extends JPanel {
 
         // Vehicle type row
         add(new JLabel("Vehicle Type:"));
-        vehicleTypeField = new JTextField();
-        add(vehicleTypeField);
 
-        // Start time row
-        add(new JLabel("Start Time (yyyy-MM-dd HH:mm):"));
-        startTimeField = new JTextField();
-        add(startTimeField);
+        String[] vehicleTypes = {"Car", "SUV", "Jeep", "Pickup Truck", "Motorcycle", "Bike", "Truck", "Bus"};
 
-        // End time row
-        add(new JLabel("End Time (yyyy-MM-dd HH:mm):"));
-        endTimeField = new JTextField();
-        add(endTimeField);
+        vehicleTypeDropdown = new JComboBox<>(vehicleTypes);
+        add(vehicleTypeDropdown);
+
+        // Start date
+        add(new JLabel("Start Date:"));
+        startDateSpinner = new JSpinner(new SpinnerDateModel());
+        startDateSpinner.setEditor(new JSpinner.DateEditor(startDateSpinner, "dd/MM/yyyy"));
+        add(startDateSpinner);
+
+        // Start time
+        add(new JLabel("Start Time:"));
+
+        JPanel startTimePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
+
+        startHourSpinner = new JSpinner(new SpinnerNumberModel(12, 0, 23, 1));
+        startMinuteSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
+
+        startTimePanel.add(startHourSpinner);
+        startTimePanel.add(new JLabel(":"));
+        startTimePanel.add(startMinuteSpinner);
+
+        add(startTimePanel);
+
+        // End date
+        add(new JLabel("End Date:"));
+        endDateSpinner = new JSpinner(new SpinnerDateModel());
+        endDateSpinner.setEditor(new JSpinner.DateEditor(endDateSpinner, "dd/MM/yyyy"));
+        add(endDateSpinner);
+
+        // End time
+        add(new JLabel("End Time:"));
+
+        JPanel endTimePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
+
+        endHourSpinner = new JSpinner(new SpinnerNumberModel(13, 0, 23, 1));
+        endMinuteSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
+
+        endTimePanel.add(endHourSpinner);
+        endTimePanel.add(new JLabel(":"));
+        endTimePanel.add(endMinuteSpinner);
+
+        add(endTimePanel);
 
         // Submit button
         JButton submitButton = new JButton("Reserve Space");
@@ -85,12 +119,10 @@ public class ReservationPanel extends JPanel {
         // Get the text from the input fields
         String name = nameField.getText().trim();
         String vehicleNumber = vehicleNumberField.getText().trim();
-        String vehicleType = vehicleTypeField.getText().trim();
-        String startText = startTimeField.getText().trim();
-        String endText = endTimeField.getText().trim();
+        String vehicleType = (String) vehicleTypeDropdown.getSelectedItem();
 
         // Check inputs are not empty
-        if (name.isEmpty() || vehicleNumber.isEmpty() || vehicleType.isEmpty() || startText.isEmpty() || endText.isEmpty()) {
+        if (name.isEmpty() || vehicleNumber.isEmpty() || vehicleType.isEmpty()) {
             resultLabel.setText("Please fill in all fields.");
             return;
         }
@@ -103,17 +135,14 @@ public class ReservationPanel extends JPanel {
             return;
         }
 
-        // Try to read the start and end time text as actual date and time values
-        LocalDateTime startTime;
-        LocalDateTime endTime;
+        Date startDate = (Date) startDateSpinner.getValue();
+        Date endDate = (Date) endDateSpinner.getValue();
 
-        try {
-            startTime = LocalDateTime.parse(startText, FORMAT);
-            endTime = LocalDateTime.parse(endText, FORMAT);
-        } catch (DateTimeParseException e) {
-            resultLabel.setText("Invalid date format. Use yyyy-MM-dd HH:mm");
-            return;
-        }
+        LocalDateTime startTime = LocalDateTime.ofInstant(startDate.toInstant(), java.time.ZoneId.systemDefault()).withHour((int) startHourSpinner.getValue())
+        .withMinute((int) startMinuteSpinner.getValue()).withSecond(0).withNano(0);
+
+        LocalDateTime endTime = LocalDateTime.ofInstant(endDate.toInstant(),java.time.ZoneId.systemDefault()).withHour((int) endHourSpinner.getValue())
+        .withMinute((int) endMinuteSpinner.getValue()).withSecond(0).withNano(0);
 
         // End time must be after start time
         if (!endTime.isAfter(startTime)) {
@@ -130,8 +159,13 @@ public class ReservationPanel extends JPanel {
         // Show the result to the user
         if (reservation == null) {
             resultLabel.setText("No available space for your vehicle type.");
-        } else {
+        } 
+        else {
             resultLabel.setText("Reserved! ID: " + reservation.getReservationId() + ", Price: " + reservation.getPrice());
+
+            nameField.setText("");
+            vehicleNumberField.setText("");
+            vehicleTypeDropdown.setSelectedIndex(0);
         }
     }
 

@@ -10,8 +10,9 @@ public class Vehicle {
     private String vehicleType;
     // Group Classification based off vehicle type
     private VehicleClass vehicleClass;
-    // Time of vehicle entry
+    // Time of vehicle entry/exit
     private LocalDateTime entryTime;
+    private LocalDateTime exitTime;
 
     // Constructor to set vehicle attributes, and entry time recorded
     public Vehicle (String name, String vehicleNumber, String vehicleType, VehicleClass vehicleClass) {
@@ -37,5 +38,13 @@ public class Vehicle {
     }
     public LocalDateTime getEntryTime() {
         return entryTime;
+    }
+    public LocalDateTime getExitTime() {
+        return exitTime;
+    }
+
+    // Record exit time
+    public void recordExit() {
+        this.exitTime = LocalDateTime.now();
     }
 }

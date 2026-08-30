@@ -2,6 +2,7 @@ package parking.gui;
 
 import parking.core.ParkingLot;
 import parking.core.ParkingSpace;
+import parking.core.Vehicle;
 import parking.payment.Payment;
 import parking.payment.PaymentManager;
 import parking.reservation.Reservation;
@@ -13,6 +14,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class ManagementWindow extends JFrame {
 
@@ -25,6 +27,10 @@ public class ManagementWindow extends JFrame {
     private DefaultTableModel spacesModel;
     private DefaultTableModel reservationsModel;
     private DefaultTableModel paymentsModel;
+    private DefaultTableModel vehicleHistoryModel;
+
+    // Date format
+    private static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("dd MMM yyyy, hh:mm a");
 
     // Constructor builds the management window
     public ManagementWindow(ParkingLot parkingLot, ReservationManager reservationManager, PaymentManager paymentManager) {
@@ -42,14 +48,20 @@ public class ManagementWindow extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane();
 
         // Set up column names for each table
-        spacesModel = new DefaultTableModel(new String[]{"Space", "Floor", "Class", "Status", "Vehicle"}, 0);
-        reservationsModel = new DefaultTableModel(new String[]{"ID", "Vehicle", "Status", "Price"}, 0);
-        paymentsModel = new DefaultTableModel(new String[]{"ID", "Vehicle", "Amount", "Status"}, 0);
-
-        // Add each table inside a scroll pane, wrapped in its own tab
+        spacesModel = new DefaultTableModel(
+        new String[]{"Space", "Floor", "Class", "Status", "Vehicle"}, 0);
+        reservationsModel = new DefaultTableModel(
+                new String[]{"ID", "Vehicle", "Status", "Price"}, 0);
+        paymentsModel = new DefaultTableModel(
+                new String[]{"ID", "Vehicle", "Amount", "Status"}, 0);
+        vehicleHistoryModel = new DefaultTableModel(
+                new String[]{"Name", "Vehicle", "Type", "Entry Time", "Exit Time"}, 0);
+       
+                // Add each table inside a scroll pane, wrapped in its own tab
         tabbedPane.addTab("Spaces", new JScrollPane(new JTable(spacesModel)));
         tabbedPane.addTab("Reservations", new JScrollPane(new JTable(reservationsModel)));
         tabbedPane.addTab("Payments", new JScrollPane(new JTable(paymentsModel)));
+        tabbedPane.addTab("Vehicle History", new JScrollPane(new JTable(vehicleHistoryModel)));
 
         // Refresh button, lets staff manually update the tables
         JButton refreshButton = new JButton("Refresh");
@@ -82,6 +94,7 @@ public class ManagementWindow extends JFrame {
         refreshSpacesTable();
         refreshReservationsTable();
         refreshPaymentsTable();
+        refreshVehicleHistoryTable();
     }
 
     // Refills the spaces table
@@ -144,6 +157,30 @@ public class ManagementWindow extends JFrame {
                     payment.getVehicle().getVehicleNumber(),
                     payment.getAmount(),
                     payment.getPaymentStatus()
+            });
+        }
+    }
+
+    //Refills the vehicle history table
+    private void refreshVehicleHistoryTable() {
+
+        vehicleHistoryModel.setRowCount(0);
+
+        for (Vehicle vehicle : parkingLot.getVehicleHistory()) {
+
+            String entryTime = vehicle.getEntryTime().format(DISPLAY_FORMAT);
+            String exitTime = "-";
+
+            if (vehicle.getExitTime() != null) {
+                exitTime = vehicle.getExitTime().format(DISPLAY_FORMAT);
+            }
+
+            vehicleHistoryModel.addRow(new Object[]{
+                    vehicle.getName(),
+                    vehicle.getVehicleNumber(),
+                    vehicle.getVehicleType(),
+                    entryTime,
+                    exitTime
             });
         }
     }

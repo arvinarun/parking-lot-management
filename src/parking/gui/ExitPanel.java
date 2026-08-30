@@ -112,5 +112,10 @@ public class ExitPanel extends JPanel {
         // exitVehicle already checks payment status and gives the right message
         String result = parkingLot.exitVehicle(vehicleNumber, paymentManager);
         resultLabel.setText(result);
+
+        if (result.equals("Payment confirmed. Vehicle may exit.")) {
+            vehicleNumberField.setText("");
+            methodDropdown.setSelectedIndex(0);
+        }
     }
 }
