@@ -8,11 +8,13 @@ public class ParkingSpace {
     private Vehicle occupiedVehicle;
     private Vehicle reservedVehicle;
 
+    // Create a parking space
     public ParkingSpace(int spaceNumber, VehicleClass allowedClass) {
         this.spaceNumber = spaceNumber;
         this.allowedClass = allowedClass;
     }
 
+    // Getters
     public int getSpaceNumber() {
         return spaceNumber;
     }

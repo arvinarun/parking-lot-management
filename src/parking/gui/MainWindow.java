@@ -17,19 +17,18 @@ public class MainWindow extends JFrame {
     private ReservationManager reservationManager;
     private PaymentManager paymentManager;
 
-    // Palette Colors
     private static final Color BG_DARK = new Color(27, 20, 18);
     private static final Color CARD_BG = new Color(43, 32, 28);
     private static final Color ACCENT_GREEN = new Color(39, 174, 96);
     private static final Color TEXT_WHITE = Color.WHITE;
     private static final Color TEXT_MUTED = new Color(208, 196, 188);
 
-    // Subtle Easter Egg Palette
+    // Easter Egg
     private static final Color OVERLAY_CARD = new Color(34, 25, 22);
     private static final Color GOLD_ACCENT = new Color(212, 172, 13);
     private static final Color SOFT_TEXT = new Color(185, 175, 168);
 
-    // Easter egg variables
+    // Easter Egg
     private int clickCount = 0;
     private long lastClickTime = 0;
 
@@ -44,13 +43,11 @@ public class MainWindow extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Main Background Panel
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setBackground(BG_DARK);
         mainPanel.setBorder(new EmptyBorder(35, 45, 35, 45));
 
-        // Header Panel Card
         JPanel headerPanel = new JPanel();
         headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
         headerPanel.setBackground(CARD_BG);
@@ -70,7 +67,7 @@ public class MainWindow extends JFrame {
         versionLabel.setForeground(TEXT_MUTED);
         versionLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Easter egg click listener
+        // Easter Egg
         versionLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         versionLabel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -78,7 +75,6 @@ public class MainWindow extends JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 long currentTime = System.currentTimeMillis();
 
-                // Reset counter if more than 2 seconds elapse between clicks
                 if (currentTime - lastClickTime > 2000) {
                     clickCount = 0;
                 }
@@ -86,7 +82,6 @@ public class MainWindow extends JFrame {
                 clickCount++;
                 lastClickTime = currentTime;
 
-                // 5 clicks triggers the Easter egg
                 if (clickCount >= 5) {
                     clickCount = 0;
                     showEasterEgg();
@@ -100,7 +95,6 @@ public class MainWindow extends JFrame {
 
         mainPanel.add(headerPanel);
 
-        // Visual Separator Bar
         JPanel greenLine = new JPanel();
         greenLine.setBackground(ACCENT_GREEN);
         greenLine.setMaximumSize(new Dimension(520, 3));
@@ -110,7 +104,6 @@ public class MainWindow extends JFrame {
         mainPanel.add(greenLine);
         mainPanel.add(Box.createVerticalStrut(30));
 
-        // Navigation Buttons
         JButton parkingButton = createStyledButton("PARKING OPERATIONS");
         JButton servicesButton = createStyledButton("SERVICES");
         JButton managementButton = createStyledButton("MANAGEMENT");
@@ -123,7 +116,6 @@ public class MainWindow extends JFrame {
 
         mainPanel.add(Box.createVerticalStrut(30));
 
-        // Status Indicator
         JLabel statusLabel = new JLabel("● SYSTEM READY");
         statusLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
         statusLabel.setForeground(ACCENT_GREEN);
@@ -133,7 +125,6 @@ public class MainWindow extends JFrame {
 
         add(mainPanel);
 
-        // Parking Operations Action
         parkingButton.addActionListener(e -> {
             ParkingWindow parkingWindow = new ParkingWindow(
                     this.parkingLot,
@@ -143,7 +134,6 @@ public class MainWindow extends JFrame {
             parkingWindow.setVisible(true);
         });
 
-        // Services Action
         servicesButton.addActionListener(e -> {
             ServiceWindow serviceWindow = new ServiceWindow(
                     this.parkingLot,
@@ -152,7 +142,6 @@ public class MainWindow extends JFrame {
             serviceWindow.setVisible(true);
         });
 
-        // Management Action
         managementButton.addActionListener(e -> {
             ManagementWindow managementWindow = new ManagementWindow(
                     this.parkingLot,
@@ -163,7 +152,7 @@ public class MainWindow extends JFrame {
         });
     }
 
-    // Custom-styled dark Easter egg modal
+    // Easter Egg
     private void showEasterEgg() {
         JDialog dialog = new JDialog(this, "SYSTEM OVERRIDE", true);
         dialog.setUndecorated(true);
@@ -176,7 +165,6 @@ public class MainWindow extends JFrame {
                 new EmptyBorder(30, 40, 25, 40)
         ));
 
-        // Subtitle & Header
         JLabel sysLabel = new JLabel("SYSTEM OVERRIDE DETECTED");
         sysLabel.setFont(new Font("Segoe UI", Font.BOLD, 13));
         sysLabel.setForeground(GOLD_ACCENT);
@@ -187,13 +175,12 @@ public class MainWindow extends JFrame {
         subLabel.setForeground(TEXT_WHITE);
         subLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Divider
         JPanel sep = new JPanel();
         sep.setBackground(new Color(65, 50, 44));
         sep.setMaximumSize(new Dimension(420, 1));
         sep.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Team credits container (Clean vertical list layout)
+        // Easter Egg
         JPanel teamPanel = new JPanel();
         teamPanel.setLayout(new BoxLayout(teamPanel, BoxLayout.Y_AXIS));
         teamPanel.setBackground(OVERLAY_CARD);
@@ -207,13 +194,11 @@ public class MainWindow extends JFrame {
         teamPanel.add(Box.createVerticalStrut(10));
         teamPanel.add(createMemberCard("Harshitha", "Vehicle Locator System"));
 
-        // Quote
         JLabel quoteLabel = new JLabel("\"Happy parking.\"");
         quoteLabel.setFont(new Font("Segoe UI", Font.ITALIC, 14));
         quoteLabel.setForeground(GOLD_ACCENT);
         quoteLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Close button
         JButton closeBtn = new JButton("DISMISS");
         closeBtn.setFont(new Font("Segoe UI", Font.BOLD, 12));
         closeBtn.setForeground(TEXT_WHITE);
