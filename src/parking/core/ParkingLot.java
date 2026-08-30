@@ -7,7 +7,7 @@ public class ParkingLot {
     private ArrayList <ParkingSpace> parkingSpaces;
     private ArrayList <Vehicle> vehicleHistory;
 
-    // Constructor to et attributes of all 100 parking spaces
+    // Create 100 parking spaces
     public ParkingLot() {
         parkingSpaces = new ArrayList <>();
         vehicleHistory = new ArrayList <>();
@@ -32,7 +32,7 @@ public class ParkingLot {
         }
     }
 
-    // Find the first unoccupied and unreserved space that matches vehicle class
+    // Find available space for the vehicle class
     public ParkingSpace findAvailableSpace (VehicleClass vehicleClass) {
         for (ParkingSpace space : parkingSpaces) {
             if (!space.isOccupied() && !space.isReserved() && space.getAllowedClass() == vehicleClass) {
@@ -118,7 +118,7 @@ public class ParkingLot {
         return "Unable to remove vehicle. Please try again.";
     }   
 
-    // Finds the space current occupied
+    // Find the space current occupied
     public ParkingSpace findVehicle (String vehicleNumber) {
         for (ParkingSpace space : parkingSpaces) {
             if (space.isOccupied() && space.getOccupiedVehicle() != null && space.getOccupiedVehicle().getVehicleNumber().equals(vehicleNumber)) {

@@ -20,7 +20,6 @@ public class ParkingWindow extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Enforce dark background color defaults for JTabbedPane
         UIManager.put("TabbedPane.background", CARD_BG);
         UIManager.put("TabbedPane.darkShadow", BG_DARK);
         UIManager.put("TabbedPane.shadow", BG_DARK);
@@ -37,7 +36,6 @@ public class ParkingWindow extends JFrame {
         tabbedPane.setForeground(Color.WHITE);
         tabbedPane.setOpaque(true);
 
-        // Set container panel background
         getContentPane().setBackground(BG_DARK);
 
         tabbedPane.addTab(" Entry ", new EntryPanel(parkingLot, reservationManager));

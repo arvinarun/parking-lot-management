@@ -46,7 +46,6 @@ public class ManagementWindow extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Enforce dark tab styling defaults
         UIManager.put("TabbedPane.background", CARD_BG);
         UIManager.put("TabbedPane.darkShadow", BG_DARK);
         UIManager.put("TabbedPane.shadow", BG_DARK);
