@@ -1,5 +1,6 @@
 package parking.core;
 
+import parking.payment.PaymentManager;
 import java.util.ArrayList;
 public class ParkingLot {
     // List of all parking spaces in the lot
@@ -40,7 +41,20 @@ public class ParkingLot {
         return null;
     }
     
-    // Park vehicle in parking space
+    //Finds reserved space
+    public ParkingSpace findReservedSpace (String vehicleNumber) {
+        if(vehicleNumber == null) {
+            return null;
+        }
+        for (ParkingSpace space : parkingSpaces) {
+            if(space.isReserved() && space.getReservedVehicle() != null && space.getReservedVehicle().getVehicleNumber().equalsIgnoreCase(vehicleNumber.trim())) {
+                return space;
+            }
+        }
+
+        return null;
+    }
+    // Park vehicle in valid parking space
     public ParkingSpace parkVehicle (Vehicle vehicle) {
         if (vehicle == null) {
             return null;
@@ -71,6 +85,26 @@ public class ParkingLot {
         return false;
     }
 
+    // Allowing vehicle to exit
+    public String exitVehicle(String vehicleNumber, PaymentManager paymentManager) {
+        ParkingSpace space = findVehicle(vehicleNumber);
+
+        if (space == null) {
+            return "Vehicle not found in the parking lot.";
+        }
+
+        // Check payment status
+        if (!paymentManager.isPaid(vehicleNumber)) {
+            return "Payment not completed !\nPlease complete payment before exiting.";
+        }
+
+        if (removeVehicle(vehicleNumber)) {
+            return "Payment confirmed. Vehicle may exit.";
+        }
+
+        return "Unable to remove vehicle. Please try again.";
+    }   
+
     // Finds the space current occupied
     public ParkingSpace findVehicle (String vehicleNumber) {
         for (ParkingSpace space : parkingSpaces) {
@@ -87,7 +121,7 @@ public class ParkingLot {
         return parkingSpaces.size();
     }
 
-    // return full list of spaces
+    // Return full list of spaces
     public ArrayList<ParkingSpace> getParkingSpaces() {
         return parkingSpaces;
     }
