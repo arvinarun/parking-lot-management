@@ -6,6 +6,7 @@ import parking.core.ParkingSpace;
 import java.time.Duration;
 import java.time.LocalDateTime;
 public class Reservation {
+    // generate reservation IDs
     private static int nextReservationId = 1;
 
     private String reservationId;
@@ -13,15 +14,18 @@ public class Reservation {
     private ParkingSpace parkingSpace;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-
     private double price;
     private ReservationStatus status;
 
+    // Rate per hour
     private static final double NORMAL_RATE_PER_HOUR = 100.00;
+    // Extra reservation charge
     private static final double RESERVATION_SURCHARGE = 50.00;
+    // No show charge
     private static final double NO_SHOW_CHARGE = 100.00;
 
-    public Reservation(Vehicle vehicle, ParkingSpace parkingSpace, LocalDateTime startTime, LocalDateTime endTime) {
+    // Constructor for reservation attributes
+    public Reservation (Vehicle vehicle, ParkingSpace parkingSpace, LocalDateTime startTime, LocalDateTime endTime) {
         this.reservationId = "R" + nextReservationId++;
         this.vehicle = vehicle;
         this.parkingSpace = parkingSpace;
@@ -33,6 +37,7 @@ public class Reservation {
         parkingSpace.addReservation(vehicle);
     }
 
+    // Getters
     public String getReservationId() {
         return reservationId;
     }
@@ -67,6 +72,7 @@ public class Reservation {
         return status == ReservationStatus.EXPIRED;
     }
 
+    // Cancel reservation
     public boolean cancel() {
         if (status != ReservationStatus.ACTIVE) {
             return false;
@@ -78,6 +84,7 @@ public class Reservation {
         return true;
     }
 
+    // Marks reservation as used
     public boolean markAsUsed() {
         if (status != ReservationStatus.ACTIVE) {
             return false;
@@ -88,7 +95,8 @@ public class Reservation {
         return true;
     }
 
-    public void checkExpiration(LocalDateTime currentTime) {
+    // Removes reservation for no show
+    public void checkExpiration (LocalDateTime currentTime) {
         if (status == ReservationStatus.ACTIVE && currentTime.isAfter(endTime)) {
 
             parkingSpace.cancelReservation();
@@ -96,13 +104,15 @@ public class Reservation {
         }
     }
 
-    public boolean hasPassedNoShowPeriod(LocalDateTime currentTime) {
+    // 60 min no show
+    public boolean hasPassedNoShowPeriod (LocalDateTime currentTime) {
         LocalDateTime noShowTime = startTime.plusMinutes(60);
 
         return status == ReservationStatus.ACTIVE && currentTime.isAfter(noShowTime);
     }
 
-    public void processNoShow(LocalDateTime currentTime) {
+    // Applies no show charge
+    public void processNoShow (LocalDateTime currentTime) {
         if (hasPassedNoShowPeriod(currentTime)) {
 
             price += NO_SHOW_CHARGE;
@@ -112,6 +122,7 @@ public class Reservation {
         }
     }
 
+    // Base reservation charge
     private double calculateReservationPrice() {
         long minutes = Duration.between(startTime,endTime).toMinutes();
         double hours = minutes / 60.0;
@@ -120,7 +131,8 @@ public class Reservation {
         return parkingCharge + RESERVATION_SURCHARGE;
     }
 
-    public long calculateExtraMinutes(LocalDateTime actualExitTime) {
+    // Calculated extra time
+    public long calculateExtraMinutes (LocalDateTime actualExitTime) {
         if (!actualExitTime.isAfter(endTime)) {
             return 0;
         }
@@ -128,13 +140,22 @@ public class Reservation {
         return Duration.between(endTime, actualExitTime).toMinutes();
     }
 
-    public double calculateExtraHours(LocalDateTime actualExitTime) {
+    public double calculateExtraHours (LocalDateTime actualExitTime) {
         long extraMinutes = calculateExtraMinutes(actualExitTime);
 
         return extraMinutes / 60.0;
     }
 
-    public boolean belongsToVehicle(String vehicleNumber) {
+    // Apply charge for extra time
+    public void applyExtraCharge (LocalDateTime actualExitTime) {
+        double extraHours = calculateExtraHours(actualExitTime);
+
+        if (extraHours > 0) {
+            price += extraHours * NORMAL_RATE_PER_HOUR;
+        }
+    }
+
+    public boolean belongsToVehicle (String vehicleNumber) {
         if (vehicleNumber == null) {
             return false;
         }

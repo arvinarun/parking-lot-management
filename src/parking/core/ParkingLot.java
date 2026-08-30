@@ -1,6 +1,5 @@
 package parking.core;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 public class ParkingLot {
     // List of all parking spaces in the lot
