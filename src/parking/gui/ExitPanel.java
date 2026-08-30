@@ -106,7 +106,7 @@ public class ExitPanel extends JPanel {
         }
 
         paymentManager.markAsPaid(vehicleNumber);
-        resultLabel.setText("Payment successful ($" + payment.getAmount() + "). Ready to exit.");
+        resultLabel.setText("Payment successful (LKR" + payment.getAmount() + "). Ready to exit.");
     }
 
     private void handleExit() {

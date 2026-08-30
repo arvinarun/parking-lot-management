@@ -198,7 +198,7 @@ public class ReservationPanel extends JPanel {
         if (reservation == null) {
             resultLabel.setText("No available space for your vehicle type.");
         } else {
-            resultLabel.setText("Reserved! ID: " + reservation.getReservationId() + ", Price: $" + reservation.getPrice());
+            resultLabel.setText("Reserved! ID: " + reservation.getReservationId() + ", Price: LKR" + reservation.getPrice());
             nameField.setText("");
             vehicleNumberField.setText("");
             vehicleTypeDropdown.setSelectedIndex(0);

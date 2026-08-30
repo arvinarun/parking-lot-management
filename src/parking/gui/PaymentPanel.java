@@ -91,7 +91,7 @@ public class PaymentPanel extends JPanel {
         }
 
         paymentManager.markAsPaid(vehicleNumber);
-        resultLabel.setText("Payment successful. Amount: $" + payment.getAmount());
+        resultLabel.setText("Payment successful. Amount: LKR" + payment.getAmount());
 
         vehicleNumberField.setText("");
         methodDropdown.setSelectedIndex(0);
