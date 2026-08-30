@@ -1,30 +1,28 @@
 package parking;
 
 import parking.core.ParkingLot;
-import parking.reservation.ReservationManager;
+import parking.gui.MainWindow;
 import parking.payment.PaymentManager;
-import parking.gui.ServiceWindow;
-import parking.gui.ManagementWindow;
-import parking.gui.ParkingWindow;
+import parking.reservation.ReservationManager;
+
+import javax.swing.SwingUtilities;
 
 public class Main {
 
-    // Entry point of the program
     public static void main(String[] args) {
-
-        // Create the shared objects used by both windows
+        // 1. Instantiate core parking lot
         ParkingLot parkingLot = new ParkingLot();
+
+        // 2. Instantiate ReservationManager (requires parkingLot)
         ReservationManager reservationManager = new ReservationManager(parkingLot);
+
+        // 3. Instantiate PaymentManager (requires parkingLot AND reservationManager)
         PaymentManager paymentManager = new PaymentManager(parkingLot, reservationManager);
 
-        // Open the user windows
-        ParkingWindow parkingWindow = new ParkingWindow(parkingLot, reservationManager, paymentManager);
-        parkingWindow.setVisible(true);
-        ServiceWindow serviceWindow = new ServiceWindow(parkingLot, reservationManager);
-        serviceWindow.setVisible(true);
-
-        // Open the management window
-        ManagementWindow managementWindow = new ManagementWindow(parkingLot, reservationManager, paymentManager);
-        managementWindow.setVisible(true);
+        // 4. Launch GUI on the Swing Event Dispatch Thread
+        SwingUtilities.invokeLater(() -> {
+            MainWindow mainWindow = new MainWindow(parkingLot, reservationManager, paymentManager);
+            mainWindow.setVisible(true);
+        });
     }
 }

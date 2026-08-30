@@ -6,21 +6,22 @@ import parking.reservation.Reservation;
 import parking.reservation.ReservationManager;
 
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Date;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+
 public class ReservationPanel extends JPanel {
 
-    // Shared object needed to make a reservation
     private ReservationManager reservationManager;
 
-    // Input fields
     private JTextField nameField;
     private JTextField vehicleNumberField;
     private JComboBox<String> vehicleTypeDropdown;
-    
+
     private JSpinner startDateSpinner;
     private JSpinner startHourSpinner;
     private JSpinner startMinuteSpinner;
@@ -29,167 +30,238 @@ public class ReservationPanel extends JPanel {
     private JSpinner endHourSpinner;
     private JSpinner endMinuteSpinner;
 
-    // Label to show the result message
     private JLabel resultLabel;
 
-    // Constructor builds the reservation tab layout
+    private static final Color CARD_BG = new Color(43, 32, 28);
+    private static final Color INPUT_BG = new Color(59, 44, 39);
+    private static final Color ACCENT_GREEN = new Color(39, 174, 96);
+    private static final Color TEXT_WHITE = Color.WHITE;
+
     public ReservationPanel(ReservationManager reservationManager) {
         this.reservationManager = reservationManager;
 
-        // Use a simple vertical layout, one row per item
-        setLayout(new GridLayout(9, 2, 5, 5));
+        setBackground(new Color(27, 20, 18));
+        setLayout(new GridBagLayout());
 
-        // Name row
-        add(new JLabel("Name:"));
-        nameField = new JTextField();
-        add(nameField);
+        JPanel formCard = new JPanel(new GridBagLayout());
+        formCard.setBackground(CARD_BG);
+        formCard.setBorder(new CompoundBorder(
+                new LineBorder(new Color(65, 50, 44), 1, true),
+                new EmptyBorder(20, 25, 20, 25)
+        ));
 
-        // Vehicle number row
-        add(new JLabel("Vehicle Number:"));
-        vehicleNumberField = new JTextField();
-        add(vehicleNumberField);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(8, 8, 8, 8);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Vehicle type row
-        add(new JLabel("Vehicle Type:"));
+        // Name
+        gbc.gridx = 0; gbc.gridy = 0;
+        formCard.add(createFormLabel("Name:"), gbc);
+
+        nameField = createStyledTextField();
+        gbc.gridx = 1;
+        formCard.add(nameField, gbc);
+
+        // Vehicle Number
+        gbc.gridx = 0; gbc.gridy = 1;
+        formCard.add(createFormLabel("Vehicle Number:"), gbc);
+
+        vehicleNumberField = createStyledTextField();
+        gbc.gridx = 1;
+        formCard.add(vehicleNumberField, gbc);
+
+        // Vehicle Type
+        gbc.gridx = 0; gbc.gridy = 2;
+        formCard.add(createFormLabel("Vehicle Type:"), gbc);
 
         String[] vehicleTypes = {"Car", "SUV", "Jeep", "Pickup Truck", "Motorcycle", "Bike", "Truck", "Bus"};
-
         vehicleTypeDropdown = new JComboBox<>(vehicleTypes);
-        add(vehicleTypeDropdown);
+        styleComboBox(vehicleTypeDropdown);
+        gbc.gridx = 1;
+        formCard.add(vehicleTypeDropdown, gbc);
 
-        // Start date
-        add(new JLabel("Start Date:"));
+        // Start Date & Time
+        gbc.gridx = 0; gbc.gridy = 3;
+        formCard.add(createFormLabel("Start Date:"), gbc);
+
         startDateSpinner = new JSpinner(new SpinnerDateModel());
         startDateSpinner.setEditor(new JSpinner.DateEditor(startDateSpinner, "dd/MM/yyyy"));
-        add(startDateSpinner);
+        styleSpinner(startDateSpinner);
+        gbc.gridx = 1;
+        formCard.add(startDateSpinner, gbc);
 
-        // Start time
-        add(new JLabel("Start Time:"));
+        gbc.gridx = 0; gbc.gridy = 4;
+        formCard.add(createFormLabel("Start Time:"), gbc);
 
-        JPanel startTimePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
-
+        JPanel startTimePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 0));
+        startTimePanel.setBackground(CARD_BG);
         startHourSpinner = new JSpinner(new SpinnerNumberModel(12, 0, 23, 1));
         startMinuteSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
+        styleSpinner(startHourSpinner);
+        styleSpinner(startMinuteSpinner);
+
+        JLabel colon1 = new JLabel(":");
+        colon1.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        colon1.setForeground(TEXT_WHITE);
 
         startTimePanel.add(startHourSpinner);
-        startTimePanel.add(new JLabel(":"));
+        startTimePanel.add(colon1);
         startTimePanel.add(startMinuteSpinner);
+        gbc.gridx = 1;
+        formCard.add(startTimePanel, gbc);
 
-        add(startTimePanel);
+        // End Date & Time
+        gbc.gridx = 0; gbc.gridy = 5;
+        formCard.add(createFormLabel("End Date:"), gbc);
 
-        // End date
-        add(new JLabel("End Date:"));
         endDateSpinner = new JSpinner(new SpinnerDateModel());
         endDateSpinner.setEditor(new JSpinner.DateEditor(endDateSpinner, "dd/MM/yyyy"));
-        add(endDateSpinner);
+        styleSpinner(endDateSpinner);
+        gbc.gridx = 1;
+        formCard.add(endDateSpinner, gbc);
 
-        // End time
-        add(new JLabel("End Time:"));
+        gbc.gridx = 0; gbc.gridy = 6;
+        formCard.add(createFormLabel("End Time:"), gbc);
 
-        JPanel endTimePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
-
+        JPanel endTimePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 4, 0));
+        endTimePanel.setBackground(CARD_BG);
         endHourSpinner = new JSpinner(new SpinnerNumberModel(13, 0, 23, 1));
         endMinuteSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 59, 1));
+        styleSpinner(endHourSpinner);
+        styleSpinner(endMinuteSpinner);
+
+        JLabel colon2 = new JLabel(":");
+        colon2.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        colon2.setForeground(TEXT_WHITE);
 
         endTimePanel.add(endHourSpinner);
-        endTimePanel.add(new JLabel(":"));
+        endTimePanel.add(colon2);
         endTimePanel.add(endMinuteSpinner);
+        gbc.gridx = 1;
+        formCard.add(endTimePanel, gbc);
 
-        add(endTimePanel);
+        // Submit Button
+        JButton submitButton = createActionButton("Reserve Space");
+        gbc.gridx = 0; gbc.gridy = 7; gbc.gridwidth = 2;
+        gbc.insets = new Insets(15, 8, 8, 8);
+        formCard.add(submitButton, gbc);
 
-        // Submit button
-        JButton submitButton = new JButton("Reserve Space");
-        add(submitButton);
+        // Result Label
+        resultLabel = new JLabel(" ", SwingConstants.CENTER);
+        resultLabel.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        resultLabel.setForeground(ACCENT_GREEN);
+        gbc.gridy = 8;
+        formCard.add(resultLabel, gbc);
 
-        // Result message label
-        resultLabel = new JLabel(" ");
-        add(resultLabel);
+        add(formCard);
 
-        // When the button is clicked, run the reservation logic
-        submitButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                handleReservation();
-            }
-        });
+        submitButton.addActionListener(e -> handleReservation());
     }
 
-    // Runs when the user submits the reservation form
     private void handleReservation() {
-
-        // Get the text from the input fields
         String name = nameField.getText().trim();
         String vehicleNumber = vehicleNumberField.getText().trim();
         String vehicleType = (String) vehicleTypeDropdown.getSelectedItem();
 
-        // Check inputs are not empty
-        if (name.isEmpty() || vehicleNumber.isEmpty() || vehicleType.isEmpty()) {
+        if (name.isEmpty() || vehicleNumber.isEmpty() || vehicleType == null) {
             resultLabel.setText("Please fill in all fields.");
             return;
         }
 
-        // Classify the vehicle type entered
         VehicleClass vehicleClass = classifyVehicle(vehicleType);
-
         if (vehicleClass == null) {
-            resultLabel.setText("Invalid vehicle type. Please try again.");
+            resultLabel.setText("Invalid vehicle type.");
             return;
         }
 
         Date startDate = (Date) startDateSpinner.getValue();
         Date endDate = (Date) endDateSpinner.getValue();
 
-        LocalDateTime startTime = LocalDateTime.ofInstant(startDate.toInstant(), java.time.ZoneId.systemDefault()).withHour((int) startHourSpinner.getValue())
-        .withMinute((int) startMinuteSpinner.getValue()).withSecond(0).withNano(0);
+        LocalDateTime startTime = LocalDateTime.ofInstant(startDate.toInstant(), ZoneId.systemDefault())
+                .withHour((int) startHourSpinner.getValue())
+                .withMinute((int) startMinuteSpinner.getValue())
+                .withSecond(0).withNano(0);
 
-        LocalDateTime endTime = LocalDateTime.ofInstant(endDate.toInstant(),java.time.ZoneId.systemDefault()).withHour((int) endHourSpinner.getValue())
-        .withMinute((int) endMinuteSpinner.getValue()).withSecond(0).withNano(0);
+        LocalDateTime endTime = LocalDateTime.ofInstant(endDate.toInstant(), ZoneId.systemDefault())
+                .withHour((int) endHourSpinner.getValue())
+                .withMinute((int) endMinuteSpinner.getValue())
+                .withSecond(0).withNano(0);
 
-        // End time must be after start time
         if (!endTime.isAfter(startTime)) {
             resultLabel.setText("End time must be after start time.");
             return;
         }
 
-        // Create the vehicle for this reservation
         Vehicle vehicle = new Vehicle(name, vehicleNumber, vehicleType, vehicleClass);
-
-        // Try to create the reservation
         Reservation reservation = reservationManager.createReservation(vehicle, startTime, endTime);
 
-        // Show the result to the user
         if (reservation == null) {
             resultLabel.setText("No available space for your vehicle type.");
-        } 
-        else {
-            resultLabel.setText("Reserved! ID: " + reservation.getReservationId() + ", Price: " + reservation.getPrice());
-
+        } else {
+            resultLabel.setText("Reserved! ID: " + reservation.getReservationId() + ", Price: $" + reservation.getPrice());
             nameField.setText("");
             vehicleNumberField.setText("");
             vehicleTypeDropdown.setSelectedIndex(0);
         }
     }
 
-    // Same classification rules used in VehicleLocator, matches vehicle type text to a class
     private VehicleClass classifyVehicle(String vehicleType) {
         switch (vehicleType.toLowerCase()) {
-            case "suv":
-            case "car":
-            case "jeep":
-            case "pickup truck":
-            case "pickup":
+            case "suv": case "car": case "jeep": case "pickup truck": case "pickup":
                 return VehicleClass.LIGHT;
-
-            case "motorcycle":
-            case "bike":
-            case "motorbike":
+            case "motorcycle": case "bike": case "motorbike":
                 return VehicleClass.MOTORCYCLE;
-
-            case "truck":
-            case "bus":
+            case "truck": case "bus":
                 return VehicleClass.HEAVY;
-
             default:
                 return null;
         }
+    }
+
+    private JLabel createFormLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        label.setForeground(TEXT_WHITE);
+        return label;
+    }
+
+    private JTextField createStyledTextField() {
+        JTextField tf = new JTextField(15);
+        tf.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        tf.setBackground(INPUT_BG);
+        tf.setForeground(TEXT_WHITE);
+        tf.setCaretColor(TEXT_WHITE);
+        tf.setBorder(new CompoundBorder(
+                new LineBorder(ACCENT_GREEN, 1),
+                new EmptyBorder(5, 8, 5, 8)
+        ));
+        return tf;
+    }
+
+    private void styleComboBox(JComboBox<?> box) {
+        box.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        box.setBackground(INPUT_BG);
+        box.setForeground(TEXT_WHITE);
+    }
+
+    private void styleSpinner(JSpinner spinner) {
+        spinner.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        spinner.setBackground(INPUT_BG);
+        JComponent editor = spinner.getEditor();
+        if (editor instanceof JSpinner.DefaultEditor) {
+            ((JSpinner.DefaultEditor) editor).getTextField().setBackground(INPUT_BG);
+            ((JSpinner.DefaultEditor) editor).getTextField().setForeground(TEXT_WHITE);
+        }
+    }
+
+    private JButton createActionButton(String text) {
+        JButton btn = new JButton(text);
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        btn.setForeground(TEXT_WHITE);
+        btn.setBackground(ACCENT_GREEN);
+        btn.setFocusPainted(false);
+        btn.setPreferredSize(new Dimension(0, 42));
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        return btn;
     }
 }
