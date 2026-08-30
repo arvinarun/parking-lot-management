@@ -9,20 +9,25 @@ public class VehicleLocator {
 
     private ParkingLot parkingLot;
 
+    // Constructor to connect attributes 
     public VehicleLocator(ParkingLot parkingLot) {
         this.parkingLot = parkingLot;
     }
 
-    public String findVehicle(String vehicleNumber, String vehicleType) {
+    public String findVehicle(String name, String vehicleNumber, String vehicleType) {
 
+        // Invalid inputs
+        if(name == null || name.trim().isEmpty()) {
+            return "Invalid information !\nPlease enter your.";
+        }
         if(vehicleNumber == null || vehicleNumber.trim().isEmpty()) {
             return "Invalid information !\nPlease enter a vehicle number.";
         }
-
         if(vehicleType == null || vehicleType.trim().isEmpty()) {
             return "Invalid information !\nPlease enter a vehicle type.";
         }
 
+        name = name.trim();
         vehicleNumber = vehicleNumber.trim();
         vehicleType = vehicleType.trim();
 
@@ -44,6 +49,10 @@ public class VehicleLocator {
             return "Vehicle not found !\nPlease check your vehicle number and type.";
         }
 
+        if (!vehicle.getName().equalsIgnoreCase(name)) {
+            return "Vehicle not found !\nPlease check your name.";
+        }
+
         int floor;
 
         if(space.getSpaceNumber() <= 50) {
@@ -57,6 +66,7 @@ public class VehicleLocator {
                 "\nParking Space: " + space.getSpaceNumber();
     }
 
+    // Calasification
     private VehicleClass classifyVehicle(String vehicleType) {
 
         switch(vehicleType.toLowerCase()) {

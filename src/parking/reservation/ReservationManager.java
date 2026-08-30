@@ -8,14 +8,17 @@ import java.util.ArrayList;
 
 public class ReservationManager {
 
+    //List holding all reservations
     private ArrayList<Reservation> reservations;
     private ParkingLot parkingLot;
 
+    // Connects attributes to a spefic space in parking lot
     public ReservationManager(ParkingLot parkingLot) {
         this.parkingLot = parkingLot;
         this.reservations = new ArrayList<>();
     }
 
+    // Creates reservation is valid space
     public Reservation createReservation(Vehicle vehicle, LocalDateTime startTime, LocalDateTime endTime) {
         if (vehicle == null) {
             return null;
@@ -39,6 +42,7 @@ public class ReservationManager {
         return reservation;
     }
 
+    // Finds a reservation
     public Reservation findReservation(String reservationId) {
         if (reservationId == null) {
             return null;
@@ -53,6 +57,7 @@ public class ReservationManager {
         return null;
     }
 
+    // Finds active reservation
     public Reservation findReservationByVehicle(String vehicleNumber) {
         if (vehicleNumber == null) {
             return null;
@@ -69,6 +74,18 @@ public class ReservationManager {
         return null;
     }
 
+    //Marks reservation used
+    public boolean marksReservationUsed (String vehicleNumber) {
+        Reservation reservation = findReservationByVehicle(vehicleNumber);
+
+        if (reservation == null) {
+            return false;
+        }
+
+        return reservation.markAsUsed();
+    }
+
+    // Cancels reservation
     public boolean cancelReservation(String reservationId) {
 
         Reservation reservation = findReservation(reservationId);
@@ -91,6 +108,7 @@ public class ReservationManager {
         }
     }
 
+    // Returns full list of reservations
     public ArrayList<Reservation> getReservations() {
         return reservations;
     }
