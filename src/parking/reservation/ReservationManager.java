@@ -9,22 +9,22 @@ import java.util.ArrayList;
 public class ReservationManager {
 
     //List holding all reservations
-    private ArrayList<Reservation> reservations;
+    private ArrayList <Reservation> reservations;
     private ParkingLot parkingLot;
 
     // Connects attributes to a spefic space in parking lot
-    public ReservationManager(ParkingLot parkingLot) {
+    public ReservationManager (ParkingLot parkingLot) {
         this.parkingLot = parkingLot;
-        this.reservations = new ArrayList<>();
+        this.reservations = new ArrayList<> ();
     }
 
     // Creates reservation is valid space
-    public Reservation createReservation(Vehicle vehicle, LocalDateTime startTime, LocalDateTime endTime) {
+    public Reservation createReservation (Vehicle vehicle, LocalDateTime startTime, LocalDateTime endTime) {
         if (vehicle == null) {
             return null;
         }
 
-        ParkingSpace space = parkingLot.findAvailableSpace(vehicle.getVehicleClass());
+        ParkingSpace space = parkingLot.findAvailableSpace (vehicle.getVehicleClass());
 
         if (space == null) {
             return null;
@@ -37,13 +37,13 @@ public class ReservationManager {
                 endTime
         );
 
-        reservations.add(reservation);
+        reservations.add (reservation);
 
         return reservation;
     }
 
     // Finds a reservation
-    public Reservation findReservation(String reservationId) {
+    public Reservation findReservation (String reservationId) {
         if (reservationId == null) {
             return null;
         }
@@ -58,15 +58,13 @@ public class ReservationManager {
     }
 
     // Finds active reservation
-    public Reservation findReservationByVehicle(String vehicleNumber) {
+    public Reservation findReservationByVehicle (String vehicleNumber) {
         if (vehicleNumber == null) {
             return null;
         }
 
         for (Reservation reservation : reservations) {
-            if (reservation.belongsToVehicle(vehicleNumber) &&
-                reservation.isActive()) {
-
+            if (reservation.belongsToVehicle(vehicleNumber) && reservation.isActive()) {
                 return reservation;
             }
         }
@@ -76,7 +74,7 @@ public class ReservationManager {
 
     //Marks reservation used
     public boolean marksReservationUsed (String vehicleNumber) {
-        Reservation reservation = findReservationByVehicle(vehicleNumber);
+        Reservation reservation = findReservationByVehicle (vehicleNumber);
 
         if (reservation == null) {
             return false;
@@ -86,9 +84,9 @@ public class ReservationManager {
     }
 
     // Cancels reservation
-    public boolean cancelReservation(String reservationId) {
+    public boolean cancelReservation (String reservationId) {
 
-        Reservation reservation = findReservation(reservationId);
+        Reservation reservation = findReservation (reservationId);
 
         if (reservation == null) {
             return false;
@@ -97,7 +95,7 @@ public class ReservationManager {
         return reservation.cancel();
     }
 
-    public void checkReservations(LocalDateTime currentTime) {
+    public void checkReservations (LocalDateTime currentTime) {
 
         for (Reservation reservation : reservations) {
 
